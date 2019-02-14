@@ -1,0 +1,203 @@
+{
+    "version": 3,
+    "terraform_version": "0.11.3",
+    "serial": 7,
+    "lineage": "1c28c32e-18d3-4749-91c7-cbb4b63c7177",
+    "modules": [
+        {
+            "path": [
+                "root"
+            ],
+            "outputs": {},
+            "resources": {
+                "data.aws_iam_account_alias.current": {
+                    "type": "aws_iam_account_alias",
+                    "depends_on": [],
+                    "primary": {
+                        "id": "2018-03-07 23:13:18.3486636 +0000 UTC",
+                        "attributes": {
+                            "account_alias": "snowmews",
+                            "id": "2018-03-07 23:13:18.3486636 +0000 UTC"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "provider.aws"
+                }
+            },
+            "depends_on": []
+        },
+        {
+            "path": [
+                "root",
+                "verify-us-east-1"
+            ],
+            "outputs": {
+                "account_id": {
+                    "sensitive": false,
+                    "type": "string",
+                    "value": "snowmews"
+                }
+            },
+            "resources": {
+                "data.aws_iam_account_alias.current": {
+                    "type": "aws_iam_account_alias",
+                    "depends_on": [],
+                    "primary": {
+                        "id": "2018-03-07 23:13:19.537864 +0000 UTC",
+                        "attributes": {
+                            "account_alias": "snowmews",
+                            "id": "2018-03-07 23:13:19.537864 +0000 UTC"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "module.verify-us-east-1.provider.aws"
+                }
+            },
+            "depends_on": []
+        },
+        {
+            "path": [
+                "root",
+                "verify-us-east-2"
+            ],
+            "outputs": {
+                "account_id": {
+                    "sensitive": false,
+                    "type": "string",
+                    "value": "snowmews"
+                }
+            },
+            "resources": {
+                "aws_config_configuration_recorder.config-recorder": {
+                    "type": "aws_config_configuration_recorder",
+                    "depends_on": [
+                        "aws_iam_role.config-role",
+                        "data.aws_iam_account_alias.current"
+                    ],
+                    "primary": {
+                        "id": "snowmews-config",
+                        "attributes": {
+                            "id": "snowmews-config",
+                            "name": "snowmews-config",
+                            "recording_group.#": "1",
+                            "recording_group.0.all_supported": "true",
+                            "recording_group.0.include_global_resource_types": "false",
+                            "recording_group.0.resource_types.#": "0",
+                            "role_arn": "arn:aws:iam::604905956206:role/snowmews-config-role"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "module.verify-us-east-2.provider.aws"
+                },
+                "aws_config_delivery_channel.config-channel": {
+                    "type": "aws_config_delivery_channel",
+                    "depends_on": [
+                        "aws_config_configuration_recorder.config-recorder",
+                        "aws_s3_bucket.config-bucket",
+                        "data.aws_iam_account_alias.current"
+                    ],
+                    "primary": {
+                        "id": "snowmews-config",
+                        "attributes": {
+                            "id": "snowmews-config",
+                            "name": "snowmews-config",
+                            "s3_bucket_name": "snowmews-config",
+                            "s3_key_prefix": "",
+                            "sns_topic_arn": ""
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "module.verify-us-east-2.provider.aws"
+                },
+                "data.aws_iam_account_alias.current": {
+                    "type": "aws_iam_account_alias",
+                    "depends_on": [],
+                    "primary": {
+                        "id": "2018-03-07 23:13:19.6320124 +0000 UTC",
+                        "attributes": {
+                            "account_alias": "snowmews",
+                            "id": "2018-03-07 23:13:19.6320124 +0000 UTC"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "module.verify-us-east-2.provider.aws"
+                }
+            },
+            "depends_on": []
+        },
+        {
+            "path": [
+                "root",
+                "verify-us-east-1",
+                "base"
+            ],
+            "outputs": {
+                "bucket": {
+                    "sensitive": false,
+                    "type": "string",
+                    "value": "snowmews-config"
+                }
+            },
+            "resources": {
+                "data.aws_iam_account_alias.current": {
+                    "type": "aws_iam_account_alias",
+                    "depends_on": [],
+                    "primary": {
+                        "id": "2018-03-07 23:13:19.4492106 +0000 UTC",
+                        "attributes": {
+                            "account_alias": "snowmews",
+                            "id": "2018-03-07 23:13:19.4492106 +0000 UTC"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "module.verify-us-east-1.module.base.provider.aws"
+                }
+            },
+            "depends_on": []
+        },
+        {
+            "path": [
+                "root",
+                "verify-us-east-2",
+                "base"
+            ],
+            "outputs": {
+                "bucket": {
+                    "sensitive": false,
+                    "type": "string",
+                    "value": "snowmews-config"
+                }
+            },
+            "resources": {
+                "data.aws_iam_account_alias.current": {
+                    "type": "aws_iam_account_alias",
+                    "depends_on": [],
+                    "primary": {
+                        "id": "2018-03-07 23:13:19.6259541 +0000 UTC",
+                        "attributes": {
+                            "account_alias": "snowmews",
+                            "id": "2018-03-07 23:13:19.6259541 +0000 UTC"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "module.verify-us-east-2.module.base.provider.aws"
+                }
+            },
+            "depends_on": []
+        }
+    ]
+}

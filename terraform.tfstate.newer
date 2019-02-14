@@ -1,0 +1,1508 @@
+{
+    "version": 3,
+    "terraform_version": "0.11.3",
+    "serial": 29,
+    "lineage": "0a005347-fd9c-45c6-a7b3-1c6a2ee66c60",
+    "modules": [
+        {
+            "path": [
+                "root"
+            ],
+            "outputs": {
+                "account_id": {
+                    "sensitive": false,
+                    "type": "string",
+                    "value": "chef-support"
+                }
+            },
+            "resources": {
+                "data.aws_iam_account_alias.current": {
+                    "type": "aws_iam_account_alias",
+                    "depends_on": [],
+                    "primary": {
+                        "id": "2018-03-16 19:16:06.4556863 +0000 UTC",
+                        "attributes": {
+                            "account_alias": "chef-support",
+                            "id": "2018-03-16 19:16:06.4556863 +0000 UTC"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "provider.aws"
+                },
+                "data.terraform_remote_state.fverifyoo": {
+                    "type": "terraform_remote_state",
+                    "depends_on": [
+                        "data.aws_iam_account_alias.current"
+                    ],
+                    "primary": {
+                        "id": "2018-03-16 19:16:06.8595232 +0000 UTC",
+                        "attributes": {
+                            "backend": "local",
+                            "config.%": "1",
+                            "config.path": "/mnt/c/Users/jabra/Documents/terraform/aws_verify/chef-support.tfstate",
+                            "environment": "default",
+                            "id": "2018-03-16 19:16:06.8595232 +0000 UTC",
+                            "workspace": "default"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "provider.terraform"
+                }
+            },
+            "depends_on": []
+        },
+        {
+            "path": [
+                "root",
+                "base"
+            ],
+            "outputs": {
+                "config-bucket": {
+                    "sensitive": false,
+                    "type": "string",
+                    "value": "chef-support-config"
+                },
+                "config-role-arn": {
+                    "sensitive": false,
+                    "type": "string",
+                    "value": "arn:aws:iam::695330092167:role/service-role/chef-support-config-role"
+                }
+            },
+            "resources": {
+                "aws_cloudtrail.default_trail": {
+                    "type": "aws_cloudtrail",
+                    "depends_on": [
+                        "data.aws_iam_account_alias.current"
+                    ],
+                    "primary": {
+                        "id": "chef-support-aws",
+                        "attributes": {
+                            "arn": "arn:aws:cloudtrail:us-east-1:695330092167:trail/chef-support-aws",
+                            "cloud_watch_logs_group_arn": "",
+                            "cloud_watch_logs_role_arn": "",
+                            "enable_log_file_validation": "false",
+                            "enable_logging": "true",
+                            "event_selector.#": "0",
+                            "home_region": "us-east-1",
+                            "id": "chef-support-aws",
+                            "include_global_service_events": "true",
+                            "is_multi_region_trail": "true",
+                            "kms_key_id": "",
+                            "name": "chef-support-aws",
+                            "s3_bucket_name": "chef-cloudtrail-central",
+                            "s3_key_prefix": "",
+                            "sns_topic_name": "",
+                            "tags.%": "0"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "module.base.provider.aws"
+                },
+                "aws_iam_role.config-role": {
+                    "type": "aws_iam_role",
+                    "depends_on": [
+                        "data.aws_iam_account_alias.current"
+                    ],
+                    "primary": {
+                        "id": "chef-support-config-role",
+                        "attributes": {
+                            "arn": "arn:aws:iam::695330092167:role/service-role/chef-support-config-role",
+                            "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Sid\":\"\",\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"config.amazonaws.com\"},\"Action\":\"sts:AssumeRole\"}]}",
+                            "create_date": "2018-03-09T19:21:24Z",
+                            "force_detach_policies": "false",
+                            "id": "chef-support-config-role",
+                            "name": "chef-support-config-role",
+                            "path": "/service-role/",
+                            "unique_id": "AROAIT4P6NUFM6CI7UD3Q"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "module.base.provider.aws"
+                },
+                "aws_iam_role_policy.config-policy": {
+                    "type": "aws_iam_role_policy",
+                    "depends_on": [
+                        "aws_iam_role.config-role",
+                        "aws_s3_bucket.config-bucket",
+                        "data.aws_iam_account_alias.current"
+                    ],
+                    "primary": {
+                        "id": "chef-support-config-role:chef-support-config-policy",
+                        "attributes": {
+                            "id": "chef-support-config-role:chef-support-config-policy",
+                            "name": "chef-support-config-policy",
+                            "policy": "{\n    \"Version\": \"2012-10-17\",\n    \"Statement\": [\n        {\n            \"Effect\": \"Allow\",\n            \"Action\": [\n                \"s3:PutObject*\"\n            ],\n            \"Resource\": [\n              \"arn:aws:s3:::chef-support-config\",\n              \"arn:aws:s3:::chef-support-config/*\"   \n            ],\n            \"Condition\": {\n                \"StringLike\": {\n                    \"s3:x-amz-acl\": \"bucket-owner-full-control\"\n                }\n            }\n        },\n        {\n            \"Effect\": \"Allow\",\n            \"Action\": [\n                \"s3:GetBucketAcl\"\n            ],\n            \"Resource\": \"arn:aws:s3:::chef-support-config\"\n        }\n    ]\n}",
+                            "role": "chef-support-config-role"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "module.base.provider.aws"
+                },
+                "aws_s3_bucket.config-bucket": {
+                    "type": "aws_s3_bucket",
+                    "depends_on": [
+                        "data.aws_iam_account_alias.current"
+                    ],
+                    "primary": {
+                        "id": "chef-support-config",
+                        "attributes": {
+                            "acceleration_status": "",
+                            "acl": "private",
+                            "arn": "arn:aws:s3:::chef-support-config",
+                            "bucket": "chef-support-config",
+                            "bucket_domain_name": "chef-support-config.s3.amazonaws.com",
+                            "force_destroy": "true",
+                            "hosted_zone_id": "Z3AQBSTGFYJSTF",
+                            "id": "chef-support-config",
+                            "logging.#": "0",
+                            "region": "us-east-1",
+                            "replication_configuration.#": "0",
+                            "request_payer": "BucketOwner",
+                            "server_side_encryption_configuration.#": "0",
+                            "tags.%": "0",
+                            "versioning.#": "1",
+                            "versioning.0.enabled": "false",
+                            "versioning.0.mfa_delete": "false",
+                            "website.#": "0"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "module.base.provider.aws"
+                },
+                "data.aws_iam_account_alias.current": {
+                    "type": "aws_iam_account_alias",
+                    "depends_on": [],
+                    "primary": {
+                        "id": "2018-03-16 19:16:06.6411621 +0000 UTC",
+                        "attributes": {
+                            "account_alias": "chef-support",
+                            "id": "2018-03-16 19:16:06.6411621 +0000 UTC"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "module.base.provider.aws"
+                }
+            },
+            "depends_on": []
+        },
+        {
+            "path": [
+                "root",
+                "verify-ap-northeast-1"
+            ],
+            "outputs": {},
+            "resources": {
+                "aws_config_configuration_recorder.config-recorder": {
+                    "type": "aws_config_configuration_recorder",
+                    "depends_on": [
+                        "data.aws_iam_account_alias.current"
+                    ],
+                    "primary": {
+                        "id": "chef-support-config",
+                        "attributes": {
+                            "id": "chef-support-config",
+                            "name": "chef-support-config",
+                            "recording_group.#": "1",
+                            "recording_group.0.all_supported": "true",
+                            "recording_group.0.include_global_resource_types": "false",
+                            "recording_group.0.resource_types.#": "0",
+                            "role_arn": "arn:aws:iam::695330092167:role/service-role/chef-support-config-role"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "module.verify-ap-northeast-1.provider.aws"
+                },
+                "aws_config_configuration_recorder_status.config-status": {
+                    "type": "aws_config_configuration_recorder_status",
+                    "depends_on": [
+                        "aws_config_configuration_recorder.config-recorder",
+                        "aws_config_delivery_channel.config-channel"
+                    ],
+                    "primary": {
+                        "id": "chef-support-config",
+                        "attributes": {
+                            "id": "chef-support-config",
+                            "is_enabled": "true",
+                            "name": "chef-support-config"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "module.verify-ap-northeast-1.provider.aws"
+                },
+                "aws_config_delivery_channel.config-channel": {
+                    "type": "aws_config_delivery_channel",
+                    "depends_on": [
+                        "aws_config_configuration_recorder.config-recorder",
+                        "data.aws_iam_account_alias.current"
+                    ],
+                    "primary": {
+                        "id": "chef-support-config",
+                        "attributes": {
+                            "id": "chef-support-config",
+                            "name": "chef-support-config",
+                            "s3_bucket_name": "chef-support-config",
+                            "s3_key_prefix": "",
+                            "sns_topic_arn": ""
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "module.verify-ap-northeast-1.provider.aws"
+                },
+                "data.aws_iam_account_alias.current": {
+                    "type": "aws_iam_account_alias",
+                    "depends_on": [],
+                    "primary": {
+                        "id": "2018-03-16 19:16:06.6959071 +0000 UTC",
+                        "attributes": {
+                            "account_alias": "chef-support",
+                            "id": "2018-03-16 19:16:06.6959071 +0000 UTC"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "module.verify-ap-northeast-1.provider.aws"
+                }
+            },
+            "depends_on": []
+        },
+        {
+            "path": [
+                "root",
+                "verify-ap-northeast-2"
+            ],
+            "outputs": {},
+            "resources": {
+                "aws_config_configuration_recorder.config-recorder": {
+                    "type": "aws_config_configuration_recorder",
+                    "depends_on": [
+                        "data.aws_iam_account_alias.current"
+                    ],
+                    "primary": {
+                        "id": "chef-support-config",
+                        "attributes": {
+                            "id": "chef-support-config",
+                            "name": "chef-support-config",
+                            "recording_group.#": "1",
+                            "recording_group.0.all_supported": "true",
+                            "recording_group.0.include_global_resource_types": "false",
+                            "recording_group.0.resource_types.#": "0",
+                            "role_arn": "arn:aws:iam::695330092167:role/service-role/chef-support-config-role"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "module.verify-ap-northeast-2.provider.aws"
+                },
+                "aws_config_configuration_recorder_status.config-status": {
+                    "type": "aws_config_configuration_recorder_status",
+                    "depends_on": [
+                        "aws_config_configuration_recorder.config-recorder",
+                        "aws_config_delivery_channel.config-channel"
+                    ],
+                    "primary": {
+                        "id": "chef-support-config",
+                        "attributes": {
+                            "id": "chef-support-config",
+                            "is_enabled": "true",
+                            "name": "chef-support-config"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "module.verify-ap-northeast-2.provider.aws"
+                },
+                "aws_config_delivery_channel.config-channel": {
+                    "type": "aws_config_delivery_channel",
+                    "depends_on": [
+                        "aws_config_configuration_recorder.config-recorder",
+                        "data.aws_iam_account_alias.current"
+                    ],
+                    "primary": {
+                        "id": "chef-support-config",
+                        "attributes": {
+                            "id": "chef-support-config",
+                            "name": "chef-support-config",
+                            "s3_bucket_name": "chef-support-config",
+                            "s3_key_prefix": "",
+                            "sns_topic_arn": ""
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "module.verify-ap-northeast-2.provider.aws"
+                },
+                "data.aws_iam_account_alias.current": {
+                    "type": "aws_iam_account_alias",
+                    "depends_on": [],
+                    "primary": {
+                        "id": "2018-03-16 19:16:08.1226838 +0000 UTC",
+                        "attributes": {
+                            "account_alias": "chef-support",
+                            "id": "2018-03-16 19:16:08.1226838 +0000 UTC"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "module.verify-ap-northeast-2.provider.aws"
+                }
+            },
+            "depends_on": []
+        },
+        {
+            "path": [
+                "root",
+                "verify-ap-south-1"
+            ],
+            "outputs": {},
+            "resources": {
+                "aws_config_configuration_recorder.config-recorder": {
+                    "type": "aws_config_configuration_recorder",
+                    "depends_on": [
+                        "data.aws_iam_account_alias.current"
+                    ],
+                    "primary": {
+                        "id": "chef-support-config",
+                        "attributes": {
+                            "id": "chef-support-config",
+                            "name": "chef-support-config",
+                            "recording_group.#": "1",
+                            "recording_group.0.all_supported": "true",
+                            "recording_group.0.include_global_resource_types": "false",
+                            "recording_group.0.resource_types.#": "0",
+                            "role_arn": "arn:aws:iam::695330092167:role/service-role/chef-support-config-role"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "module.verify-ap-south-1.provider.aws"
+                },
+                "aws_config_configuration_recorder_status.config-status": {
+                    "type": "aws_config_configuration_recorder_status",
+                    "depends_on": [
+                        "aws_config_configuration_recorder.config-recorder",
+                        "aws_config_delivery_channel.config-channel"
+                    ],
+                    "primary": {
+                        "id": "chef-support-config",
+                        "attributes": {
+                            "id": "chef-support-config",
+                            "is_enabled": "true",
+                            "name": "chef-support-config"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "module.verify-ap-south-1.provider.aws"
+                },
+                "aws_config_delivery_channel.config-channel": {
+                    "type": "aws_config_delivery_channel",
+                    "depends_on": [
+                        "aws_config_configuration_recorder.config-recorder",
+                        "data.aws_iam_account_alias.current"
+                    ],
+                    "primary": {
+                        "id": "chef-support-config",
+                        "attributes": {
+                            "id": "chef-support-config",
+                            "name": "chef-support-config",
+                            "s3_bucket_name": "chef-support-config",
+                            "s3_key_prefix": "",
+                            "sns_topic_arn": ""
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "module.verify-ap-south-1.provider.aws"
+                },
+                "data.aws_iam_account_alias.current": {
+                    "type": "aws_iam_account_alias",
+                    "depends_on": [],
+                    "primary": {
+                        "id": "2018-03-16 19:16:06.7806383 +0000 UTC",
+                        "attributes": {
+                            "account_alias": "chef-support",
+                            "id": "2018-03-16 19:16:06.7806383 +0000 UTC"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "module.verify-ap-south-1.provider.aws"
+                }
+            },
+            "depends_on": []
+        },
+        {
+            "path": [
+                "root",
+                "verify-ap-southeast-1"
+            ],
+            "outputs": {},
+            "resources": {
+                "aws_config_configuration_recorder.config-recorder": {
+                    "type": "aws_config_configuration_recorder",
+                    "depends_on": [
+                        "data.aws_iam_account_alias.current"
+                    ],
+                    "primary": {
+                        "id": "chef-support-config",
+                        "attributes": {
+                            "id": "chef-support-config",
+                            "name": "chef-support-config",
+                            "recording_group.#": "1",
+                            "recording_group.0.all_supported": "true",
+                            "recording_group.0.include_global_resource_types": "false",
+                            "recording_group.0.resource_types.#": "0",
+                            "role_arn": "arn:aws:iam::695330092167:role/service-role/chef-support-config-role"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "module.verify-ap-southeast-1.provider.aws"
+                },
+                "aws_config_configuration_recorder_status.config-status": {
+                    "type": "aws_config_configuration_recorder_status",
+                    "depends_on": [
+                        "aws_config_configuration_recorder.config-recorder",
+                        "aws_config_delivery_channel.config-channel"
+                    ],
+                    "primary": {
+                        "id": "chef-support-config",
+                        "attributes": {
+                            "id": "chef-support-config",
+                            "is_enabled": "true",
+                            "name": "chef-support-config"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "module.verify-ap-southeast-1.provider.aws"
+                },
+                "aws_config_delivery_channel.config-channel": {
+                    "type": "aws_config_delivery_channel",
+                    "depends_on": [
+                        "aws_config_configuration_recorder.config-recorder",
+                        "data.aws_iam_account_alias.current"
+                    ],
+                    "primary": {
+                        "id": "chef-support-config",
+                        "attributes": {
+                            "id": "chef-support-config",
+                            "name": "chef-support-config",
+                            "s3_bucket_name": "chef-support-config",
+                            "s3_key_prefix": "",
+                            "sns_topic_arn": ""
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "module.verify-ap-southeast-1.provider.aws"
+                },
+                "data.aws_iam_account_alias.current": {
+                    "type": "aws_iam_account_alias",
+                    "depends_on": [],
+                    "primary": {
+                        "id": "2018-03-16 19:16:06.8786774 +0000 UTC",
+                        "attributes": {
+                            "account_alias": "chef-support",
+                            "id": "2018-03-16 19:16:06.8786774 +0000 UTC"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "module.verify-ap-southeast-1.provider.aws"
+                }
+            },
+            "depends_on": []
+        },
+        {
+            "path": [
+                "root",
+                "verify-ap-southeast-2"
+            ],
+            "outputs": {},
+            "resources": {
+                "aws_config_configuration_recorder.config-recorder": {
+                    "type": "aws_config_configuration_recorder",
+                    "depends_on": [
+                        "data.aws_iam_account_alias.current"
+                    ],
+                    "primary": {
+                        "id": "chef-support-config",
+                        "attributes": {
+                            "id": "chef-support-config",
+                            "name": "chef-support-config",
+                            "recording_group.#": "1",
+                            "recording_group.0.all_supported": "true",
+                            "recording_group.0.include_global_resource_types": "false",
+                            "recording_group.0.resource_types.#": "0",
+                            "role_arn": "arn:aws:iam::695330092167:role/service-role/chef-support-config-role"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "module.verify-ap-southeast-2.provider.aws"
+                },
+                "aws_config_configuration_recorder_status.config-status": {
+                    "type": "aws_config_configuration_recorder_status",
+                    "depends_on": [
+                        "aws_config_configuration_recorder.config-recorder",
+                        "aws_config_delivery_channel.config-channel"
+                    ],
+                    "primary": {
+                        "id": "chef-support-config",
+                        "attributes": {
+                            "id": "chef-support-config",
+                            "is_enabled": "true",
+                            "name": "chef-support-config"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "module.verify-ap-southeast-2.provider.aws"
+                },
+                "aws_config_delivery_channel.config-channel": {
+                    "type": "aws_config_delivery_channel",
+                    "depends_on": [
+                        "aws_config_configuration_recorder.config-recorder",
+                        "data.aws_iam_account_alias.current"
+                    ],
+                    "primary": {
+                        "id": "chef-support-config",
+                        "attributes": {
+                            "id": "chef-support-config",
+                            "name": "chef-support-config",
+                            "s3_bucket_name": "chef-support-config",
+                            "s3_key_prefix": "",
+                            "sns_topic_arn": ""
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "module.verify-ap-southeast-2.provider.aws"
+                },
+                "data.aws_iam_account_alias.current": {
+                    "type": "aws_iam_account_alias",
+                    "depends_on": [],
+                    "primary": {
+                        "id": "2018-03-16 19:16:08.1077573 +0000 UTC",
+                        "attributes": {
+                            "account_alias": "chef-support",
+                            "id": "2018-03-16 19:16:08.1077573 +0000 UTC"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "module.verify-ap-southeast-2.provider.aws"
+                }
+            },
+            "depends_on": []
+        },
+        {
+            "path": [
+                "root",
+                "verify-ca-central-1"
+            ],
+            "outputs": {},
+            "resources": {
+                "aws_config_configuration_recorder.config-recorder": {
+                    "type": "aws_config_configuration_recorder",
+                    "depends_on": [
+                        "data.aws_iam_account_alias.current"
+                    ],
+                    "primary": {
+                        "id": "chef-support-config",
+                        "attributes": {
+                            "id": "chef-support-config",
+                            "name": "chef-support-config",
+                            "recording_group.#": "1",
+                            "recording_group.0.all_supported": "true",
+                            "recording_group.0.include_global_resource_types": "false",
+                            "recording_group.0.resource_types.#": "0",
+                            "role_arn": "arn:aws:iam::695330092167:role/service-role/chef-support-config-role"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "module.verify-ca-central-1.provider.aws"
+                },
+                "aws_config_configuration_recorder_status.config-status": {
+                    "type": "aws_config_configuration_recorder_status",
+                    "depends_on": [
+                        "aws_config_configuration_recorder.config-recorder",
+                        "aws_config_delivery_channel.config-channel"
+                    ],
+                    "primary": {
+                        "id": "chef-support-config",
+                        "attributes": {
+                            "id": "chef-support-config",
+                            "is_enabled": "true",
+                            "name": "chef-support-config"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "module.verify-ca-central-1.provider.aws"
+                },
+                "aws_config_delivery_channel.config-channel": {
+                    "type": "aws_config_delivery_channel",
+                    "depends_on": [
+                        "aws_config_configuration_recorder.config-recorder",
+                        "data.aws_iam_account_alias.current"
+                    ],
+                    "primary": {
+                        "id": "chef-support-config",
+                        "attributes": {
+                            "id": "chef-support-config",
+                            "name": "chef-support-config",
+                            "s3_bucket_name": "chef-support-config",
+                            "s3_key_prefix": "",
+                            "sns_topic_arn": ""
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "module.verify-ca-central-1.provider.aws"
+                },
+                "data.aws_iam_account_alias.current": {
+                    "type": "aws_iam_account_alias",
+                    "depends_on": [],
+                    "primary": {
+                        "id": "2018-03-16 19:16:06.555893 +0000 UTC",
+                        "attributes": {
+                            "account_alias": "chef-support",
+                            "id": "2018-03-16 19:16:06.555893 +0000 UTC"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "module.verify-ca-central-1.provider.aws"
+                }
+            },
+            "depends_on": []
+        },
+        {
+            "path": [
+                "root",
+                "verify-eu-central-1"
+            ],
+            "outputs": {},
+            "resources": {
+                "aws_config_configuration_recorder.config-recorder": {
+                    "type": "aws_config_configuration_recorder",
+                    "depends_on": [
+                        "data.aws_iam_account_alias.current"
+                    ],
+                    "primary": {
+                        "id": "chef-support-config",
+                        "attributes": {
+                            "id": "chef-support-config",
+                            "name": "chef-support-config",
+                            "recording_group.#": "1",
+                            "recording_group.0.all_supported": "true",
+                            "recording_group.0.include_global_resource_types": "false",
+                            "recording_group.0.resource_types.#": "0",
+                            "role_arn": "arn:aws:iam::695330092167:role/service-role/chef-support-config-role"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "module.verify-eu-central-1.provider.aws"
+                },
+                "aws_config_configuration_recorder_status.config-status": {
+                    "type": "aws_config_configuration_recorder_status",
+                    "depends_on": [
+                        "aws_config_configuration_recorder.config-recorder",
+                        "aws_config_delivery_channel.config-channel"
+                    ],
+                    "primary": {
+                        "id": "chef-support-config",
+                        "attributes": {
+                            "id": "chef-support-config",
+                            "is_enabled": "true",
+                            "name": "chef-support-config"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "module.verify-eu-central-1.provider.aws"
+                },
+                "aws_config_delivery_channel.config-channel": {
+                    "type": "aws_config_delivery_channel",
+                    "depends_on": [
+                        "aws_config_configuration_recorder.config-recorder",
+                        "data.aws_iam_account_alias.current"
+                    ],
+                    "primary": {
+                        "id": "chef-support-config",
+                        "attributes": {
+                            "id": "chef-support-config",
+                            "name": "chef-support-config",
+                            "s3_bucket_name": "chef-support-config",
+                            "s3_key_prefix": "",
+                            "sns_topic_arn": ""
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "module.verify-eu-central-1.provider.aws"
+                },
+                "data.aws_iam_account_alias.current": {
+                    "type": "aws_iam_account_alias",
+                    "depends_on": [],
+                    "primary": {
+                        "id": "2018-03-16 19:16:08.0953139 +0000 UTC",
+                        "attributes": {
+                            "account_alias": "chef-support",
+                            "id": "2018-03-16 19:16:08.0953139 +0000 UTC"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "module.verify-eu-central-1.provider.aws"
+                }
+            },
+            "depends_on": []
+        },
+        {
+            "path": [
+                "root",
+                "verify-eu-west-1"
+            ],
+            "outputs": {},
+            "resources": {
+                "aws_config_configuration_recorder.config-recorder": {
+                    "type": "aws_config_configuration_recorder",
+                    "depends_on": [
+                        "data.aws_iam_account_alias.current"
+                    ],
+                    "primary": {
+                        "id": "chef-support-config",
+                        "attributes": {
+                            "id": "chef-support-config",
+                            "name": "chef-support-config",
+                            "recording_group.#": "1",
+                            "recording_group.0.all_supported": "true",
+                            "recording_group.0.include_global_resource_types": "false",
+                            "recording_group.0.resource_types.#": "0",
+                            "role_arn": "arn:aws:iam::695330092167:role/service-role/chef-support-config-role"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "module.verify-eu-west-1.provider.aws"
+                },
+                "aws_config_configuration_recorder_status.config-status": {
+                    "type": "aws_config_configuration_recorder_status",
+                    "depends_on": [
+                        "aws_config_configuration_recorder.config-recorder",
+                        "aws_config_delivery_channel.config-channel"
+                    ],
+                    "primary": {
+                        "id": "chef-support-config",
+                        "attributes": {
+                            "id": "chef-support-config",
+                            "is_enabled": "true",
+                            "name": "chef-support-config"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "module.verify-eu-west-1.provider.aws"
+                },
+                "aws_config_delivery_channel.config-channel": {
+                    "type": "aws_config_delivery_channel",
+                    "depends_on": [
+                        "aws_config_configuration_recorder.config-recorder",
+                        "data.aws_iam_account_alias.current"
+                    ],
+                    "primary": {
+                        "id": "chef-support-config",
+                        "attributes": {
+                            "id": "chef-support-config",
+                            "name": "chef-support-config",
+                            "s3_bucket_name": "chef-support-config",
+                            "s3_key_prefix": "",
+                            "sns_topic_arn": ""
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "module.verify-eu-west-1.provider.aws"
+                },
+                "data.aws_iam_account_alias.current": {
+                    "type": "aws_iam_account_alias",
+                    "depends_on": [],
+                    "primary": {
+                        "id": "2018-03-16 19:16:06.7887202 +0000 UTC",
+                        "attributes": {
+                            "account_alias": "chef-support",
+                            "id": "2018-03-16 19:16:06.7887202 +0000 UTC"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "module.verify-eu-west-1.provider.aws"
+                }
+            },
+            "depends_on": []
+        },
+        {
+            "path": [
+                "root",
+                "verify-eu-west-2"
+            ],
+            "outputs": {},
+            "resources": {
+                "aws_config_configuration_recorder.config-recorder": {
+                    "type": "aws_config_configuration_recorder",
+                    "depends_on": [
+                        "data.aws_iam_account_alias.current"
+                    ],
+                    "primary": {
+                        "id": "chef-support-config",
+                        "attributes": {
+                            "id": "chef-support-config",
+                            "name": "chef-support-config",
+                            "recording_group.#": "1",
+                            "recording_group.0.all_supported": "true",
+                            "recording_group.0.include_global_resource_types": "false",
+                            "recording_group.0.resource_types.#": "0",
+                            "role_arn": "arn:aws:iam::695330092167:role/service-role/chef-support-config-role"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "module.verify-eu-west-2.provider.aws"
+                },
+                "aws_config_configuration_recorder_status.config-status": {
+                    "type": "aws_config_configuration_recorder_status",
+                    "depends_on": [
+                        "aws_config_configuration_recorder.config-recorder",
+                        "aws_config_delivery_channel.config-channel"
+                    ],
+                    "primary": {
+                        "id": "chef-support-config",
+                        "attributes": {
+                            "id": "chef-support-config",
+                            "is_enabled": "true",
+                            "name": "chef-support-config"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "module.verify-eu-west-2.provider.aws"
+                },
+                "aws_config_delivery_channel.config-channel": {
+                    "type": "aws_config_delivery_channel",
+                    "depends_on": [
+                        "aws_config_configuration_recorder.config-recorder",
+                        "data.aws_iam_account_alias.current"
+                    ],
+                    "primary": {
+                        "id": "chef-support-config",
+                        "attributes": {
+                            "id": "chef-support-config",
+                            "name": "chef-support-config",
+                            "s3_bucket_name": "chef-support-config",
+                            "s3_key_prefix": "",
+                            "sns_topic_arn": ""
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "module.verify-eu-west-2.provider.aws"
+                },
+                "data.aws_iam_account_alias.current": {
+                    "type": "aws_iam_account_alias",
+                    "depends_on": [],
+                    "primary": {
+                        "id": "2018-03-16 19:16:07.1724541 +0000 UTC",
+                        "attributes": {
+                            "account_alias": "chef-support",
+                            "id": "2018-03-16 19:16:07.1724541 +0000 UTC"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "module.verify-eu-west-2.provider.aws"
+                }
+            },
+            "depends_on": []
+        },
+        {
+            "path": [
+                "root",
+                "verify-eu-west-3"
+            ],
+            "outputs": {},
+            "resources": {
+                "aws_config_configuration_recorder.config-recorder": {
+                    "type": "aws_config_configuration_recorder",
+                    "depends_on": [
+                        "data.aws_iam_account_alias.current"
+                    ],
+                    "primary": {
+                        "id": "chef-support-config",
+                        "attributes": {
+                            "id": "chef-support-config",
+                            "name": "chef-support-config",
+                            "recording_group.#": "1",
+                            "recording_group.0.all_supported": "true",
+                            "recording_group.0.include_global_resource_types": "false",
+                            "recording_group.0.resource_types.#": "0",
+                            "role_arn": "arn:aws:iam::695330092167:role/service-role/chef-support-config-role"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "module.verify-eu-west-3.provider.aws"
+                },
+                "aws_config_configuration_recorder_status.config-status": {
+                    "type": "aws_config_configuration_recorder_status",
+                    "depends_on": [
+                        "aws_config_configuration_recorder.config-recorder",
+                        "aws_config_delivery_channel.config-channel"
+                    ],
+                    "primary": {
+                        "id": "chef-support-config",
+                        "attributes": {
+                            "id": "chef-support-config",
+                            "is_enabled": "true",
+                            "name": "chef-support-config"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "module.verify-eu-west-3.provider.aws"
+                },
+                "aws_config_delivery_channel.config-channel": {
+                    "type": "aws_config_delivery_channel",
+                    "depends_on": [
+                        "aws_config_configuration_recorder.config-recorder",
+                        "data.aws_iam_account_alias.current"
+                    ],
+                    "primary": {
+                        "id": "chef-support-config",
+                        "attributes": {
+                            "id": "chef-support-config",
+                            "name": "chef-support-config",
+                            "s3_bucket_name": "chef-support-config",
+                            "s3_key_prefix": "",
+                            "sns_topic_arn": ""
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "module.verify-eu-west-3.provider.aws"
+                },
+                "data.aws_iam_account_alias.current": {
+                    "type": "aws_iam_account_alias",
+                    "depends_on": [],
+                    "primary": {
+                        "id": "2018-03-16 19:16:06.6954545 +0000 UTC",
+                        "attributes": {
+                            "account_alias": "chef-support",
+                            "id": "2018-03-16 19:16:06.6954545 +0000 UTC"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "module.verify-eu-west-3.provider.aws"
+                }
+            },
+            "depends_on": []
+        },
+        {
+            "path": [
+                "root",
+                "verify-sa-east-1"
+            ],
+            "outputs": {},
+            "resources": {
+                "aws_config_configuration_recorder.config-recorder": {
+                    "type": "aws_config_configuration_recorder",
+                    "depends_on": [
+                        "data.aws_iam_account_alias.current"
+                    ],
+                    "primary": {
+                        "id": "chef-support-config",
+                        "attributes": {
+                            "id": "chef-support-config",
+                            "name": "chef-support-config",
+                            "recording_group.#": "1",
+                            "recording_group.0.all_supported": "true",
+                            "recording_group.0.include_global_resource_types": "false",
+                            "recording_group.0.resource_types.#": "0",
+                            "role_arn": "arn:aws:iam::695330092167:role/service-role/chef-support-config-role"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "module.verify-sa-east-1.provider.aws"
+                },
+                "aws_config_configuration_recorder_status.config-status": {
+                    "type": "aws_config_configuration_recorder_status",
+                    "depends_on": [
+                        "aws_config_configuration_recorder.config-recorder",
+                        "aws_config_delivery_channel.config-channel"
+                    ],
+                    "primary": {
+                        "id": "chef-support-config",
+                        "attributes": {
+                            "id": "chef-support-config",
+                            "is_enabled": "true",
+                            "name": "chef-support-config"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "module.verify-sa-east-1.provider.aws"
+                },
+                "aws_config_delivery_channel.config-channel": {
+                    "type": "aws_config_delivery_channel",
+                    "depends_on": [
+                        "aws_config_configuration_recorder.config-recorder",
+                        "data.aws_iam_account_alias.current"
+                    ],
+                    "primary": {
+                        "id": "chef-support-config",
+                        "attributes": {
+                            "id": "chef-support-config",
+                            "name": "chef-support-config",
+                            "s3_bucket_name": "chef-support-config",
+                            "s3_key_prefix": "",
+                            "sns_topic_arn": ""
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "module.verify-sa-east-1.provider.aws"
+                },
+                "data.aws_iam_account_alias.current": {
+                    "type": "aws_iam_account_alias",
+                    "depends_on": [],
+                    "primary": {
+                        "id": "2018-03-16 19:16:07.6285174 +0000 UTC",
+                        "attributes": {
+                            "account_alias": "chef-support",
+                            "id": "2018-03-16 19:16:07.6285174 +0000 UTC"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "module.verify-sa-east-1.provider.aws"
+                }
+            },
+            "depends_on": []
+        },
+        {
+            "path": [
+                "root",
+                "verify-us-east-1"
+            ],
+            "outputs": {},
+            "resources": {
+                "aws_config_configuration_recorder.config-recorder": {
+                    "type": "aws_config_configuration_recorder",
+                    "depends_on": [
+                        "data.aws_iam_account_alias.current"
+                    ],
+                    "primary": {
+                        "id": "chef-support-config",
+                        "attributes": {
+                            "id": "chef-support-config",
+                            "name": "chef-support-config",
+                            "recording_group.#": "1",
+                            "recording_group.0.all_supported": "true",
+                            "recording_group.0.include_global_resource_types": "true",
+                            "recording_group.0.resource_types.#": "0",
+                            "role_arn": "arn:aws:iam::695330092167:role/service-role/chef-support-config-role"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "module.verify-us-east-1.provider.aws"
+                },
+                "aws_config_configuration_recorder_status.config-status": {
+                    "type": "aws_config_configuration_recorder_status",
+                    "depends_on": [
+                        "aws_config_configuration_recorder.config-recorder",
+                        "aws_config_delivery_channel.config-channel"
+                    ],
+                    "primary": {
+                        "id": "chef-support-config",
+                        "attributes": {
+                            "id": "chef-support-config",
+                            "is_enabled": "true",
+                            "name": "chef-support-config"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "module.verify-us-east-1.provider.aws"
+                },
+                "aws_config_delivery_channel.config-channel": {
+                    "type": "aws_config_delivery_channel",
+                    "depends_on": [
+                        "aws_config_configuration_recorder.config-recorder",
+                        "data.aws_iam_account_alias.current"
+                    ],
+                    "primary": {
+                        "id": "chef-support-config",
+                        "attributes": {
+                            "id": "chef-support-config",
+                            "name": "chef-support-config",
+                            "s3_bucket_name": "chef-support-config",
+                            "s3_key_prefix": "",
+                            "sns_topic_arn": ""
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "module.verify-us-east-1.provider.aws"
+                },
+                "data.aws_iam_account_alias.current": {
+                    "type": "aws_iam_account_alias",
+                    "depends_on": [],
+                    "primary": {
+                        "id": "2018-03-16 19:16:06.7958708 +0000 UTC",
+                        "attributes": {
+                            "account_alias": "chef-support",
+                            "id": "2018-03-16 19:16:06.7958708 +0000 UTC"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "module.verify-us-east-1.provider.aws"
+                }
+            },
+            "depends_on": []
+        },
+        {
+            "path": [
+                "root",
+                "verify-us-east-2"
+            ],
+            "outputs": {},
+            "resources": {
+                "aws_config_configuration_recorder.config-recorder": {
+                    "type": "aws_config_configuration_recorder",
+                    "depends_on": [
+                        "data.aws_iam_account_alias.current"
+                    ],
+                    "primary": {
+                        "id": "chef-support-config",
+                        "attributes": {
+                            "id": "chef-support-config",
+                            "name": "chef-support-config",
+                            "recording_group.#": "1",
+                            "recording_group.0.all_supported": "true",
+                            "recording_group.0.include_global_resource_types": "false",
+                            "recording_group.0.resource_types.#": "0",
+                            "role_arn": "arn:aws:iam::695330092167:role/service-role/chef-support-config-role"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "module.verify-us-east-2.provider.aws"
+                },
+                "aws_config_configuration_recorder_status.config-status": {
+                    "type": "aws_config_configuration_recorder_status",
+                    "depends_on": [
+                        "aws_config_configuration_recorder.config-recorder",
+                        "aws_config_delivery_channel.config-channel"
+                    ],
+                    "primary": {
+                        "id": "chef-support-config",
+                        "attributes": {
+                            "id": "chef-support-config",
+                            "is_enabled": "true",
+                            "name": "chef-support-config"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "module.verify-us-east-2.provider.aws"
+                },
+                "aws_config_delivery_channel.config-channel": {
+                    "type": "aws_config_delivery_channel",
+                    "depends_on": [
+                        "aws_config_configuration_recorder.config-recorder",
+                        "data.aws_iam_account_alias.current"
+                    ],
+                    "primary": {
+                        "id": "chef-support-config",
+                        "attributes": {
+                            "id": "chef-support-config",
+                            "name": "chef-support-config",
+                            "s3_bucket_name": "chef-support-config",
+                            "s3_key_prefix": "",
+                            "sns_topic_arn": ""
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "module.verify-us-east-2.provider.aws"
+                },
+                "data.aws_iam_account_alias.current": {
+                    "type": "aws_iam_account_alias",
+                    "depends_on": [],
+                    "primary": {
+                        "id": "2018-03-16 19:16:06.8711694 +0000 UTC",
+                        "attributes": {
+                            "account_alias": "chef-support",
+                            "id": "2018-03-16 19:16:06.8711694 +0000 UTC"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "module.verify-us-east-2.provider.aws"
+                }
+            },
+            "depends_on": []
+        },
+        {
+            "path": [
+                "root",
+                "verify-us-west-1"
+            ],
+            "outputs": {},
+            "resources": {
+                "aws_config_configuration_recorder.config-recorder": {
+                    "type": "aws_config_configuration_recorder",
+                    "depends_on": [
+                        "data.aws_iam_account_alias.current"
+                    ],
+                    "primary": {
+                        "id": "chef-support-config",
+                        "attributes": {
+                            "id": "chef-support-config",
+                            "name": "chef-support-config",
+                            "recording_group.#": "1",
+                            "recording_group.0.all_supported": "true",
+                            "recording_group.0.include_global_resource_types": "false",
+                            "recording_group.0.resource_types.#": "0",
+                            "role_arn": "arn:aws:iam::695330092167:role/service-role/chef-support-config-role"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "module.verify-us-west-1.provider.aws"
+                },
+                "aws_config_configuration_recorder_status.config-status": {
+                    "type": "aws_config_configuration_recorder_status",
+                    "depends_on": [
+                        "aws_config_configuration_recorder.config-recorder",
+                        "aws_config_delivery_channel.config-channel"
+                    ],
+                    "primary": {
+                        "id": "chef-support-config",
+                        "attributes": {
+                            "id": "chef-support-config",
+                            "is_enabled": "true",
+                            "name": "chef-support-config"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "module.verify-us-west-1.provider.aws"
+                },
+                "aws_config_delivery_channel.config-channel": {
+                    "type": "aws_config_delivery_channel",
+                    "depends_on": [
+                        "aws_config_configuration_recorder.config-recorder",
+                        "data.aws_iam_account_alias.current"
+                    ],
+                    "primary": {
+                        "id": "chef-support-config",
+                        "attributes": {
+                            "id": "chef-support-config",
+                            "name": "chef-support-config",
+                            "s3_bucket_name": "chef-support-config",
+                            "s3_key_prefix": "",
+                            "sns_topic_arn": ""
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "module.verify-us-west-1.provider.aws"
+                },
+                "data.aws_iam_account_alias.current": {
+                    "type": "aws_iam_account_alias",
+                    "depends_on": [],
+                    "primary": {
+                        "id": "2018-03-16 19:16:06.6390266 +0000 UTC",
+                        "attributes": {
+                            "account_alias": "chef-support",
+                            "id": "2018-03-16 19:16:06.6390266 +0000 UTC"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "module.verify-us-west-1.provider.aws"
+                }
+            },
+            "depends_on": []
+        },
+        {
+            "path": [
+                "root",
+                "verify-us-west-2"
+            ],
+            "outputs": {},
+            "resources": {
+                "aws_config_configuration_recorder.config-recorder": {
+                    "type": "aws_config_configuration_recorder",
+                    "depends_on": [
+                        "data.aws_iam_account_alias.current"
+                    ],
+                    "primary": {
+                        "id": "chef-support-config",
+                        "attributes": {
+                            "id": "chef-support-config",
+                            "name": "chef-support-config",
+                            "recording_group.#": "1",
+                            "recording_group.0.all_supported": "true",
+                            "recording_group.0.include_global_resource_types": "false",
+                            "recording_group.0.resource_types.#": "0",
+                            "role_arn": "arn:aws:iam::695330092167:role/service-role/chef-support-config-role"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "module.verify-us-west-2.provider.aws"
+                },
+                "aws_config_configuration_recorder_status.config-status": {
+                    "type": "aws_config_configuration_recorder_status",
+                    "depends_on": [
+                        "aws_config_configuration_recorder.config-recorder",
+                        "aws_config_delivery_channel.config-channel"
+                    ],
+                    "primary": {
+                        "id": "chef-support-config",
+                        "attributes": {
+                            "id": "chef-support-config",
+                            "is_enabled": "true",
+                            "name": "chef-support-config"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "module.verify-us-west-2.provider.aws"
+                },
+                "aws_config_delivery_channel.config-channel": {
+                    "type": "aws_config_delivery_channel",
+                    "depends_on": [
+                        "aws_config_configuration_recorder.config-recorder",
+                        "data.aws_iam_account_alias.current"
+                    ],
+                    "primary": {
+                        "id": "chef-support-config",
+                        "attributes": {
+                            "id": "chef-support-config",
+                            "name": "chef-support-config",
+                            "s3_bucket_name": "chef-support-config",
+                            "s3_key_prefix": "",
+                            "sns_topic_arn": ""
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "module.verify-us-west-2.provider.aws"
+                },
+                "data.aws_iam_account_alias.current": {
+                    "type": "aws_iam_account_alias",
+                    "depends_on": [],
+                    "primary": {
+                        "id": "2018-03-16 19:16:06.6407009 +0000 UTC",
+                        "attributes": {
+                            "account_alias": "chef-support",
+                            "id": "2018-03-16 19:16:06.6407009 +0000 UTC"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "module.verify-us-west-2.provider.aws"
+                }
+            },
+            "depends_on": []
+        }
+    ]
+}
